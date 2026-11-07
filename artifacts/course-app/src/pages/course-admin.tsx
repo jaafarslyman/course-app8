@@ -172,9 +172,9 @@ function SortableItem({ id, children }: { id: string; children: (props: { attrib
   );
 }
 
-function DragHandle({ attributes, listeners }: { attributes: DraggableAttributes; listeners: SortListeners }) {
+function DragHandle({ attributes, listeners, testId }: { attributes: DraggableAttributes; listeners: SortListeners; testId?: string }) {
   return (
-    <button type="button" className="course-tool drag-handle" aria-label="اسحب لإعادة الترتيب" {...attributes} {...listeners}>
+    <button type="button" className="course-tool drag-handle" aria-label="اسحب لإعادة الترتيب" data-testid={testId} {...attributes} {...listeners}>
       <GripVertical size={16} aria-hidden="true" />
     </button>
   );
@@ -267,20 +267,35 @@ export function AdminCoursesIndexPage() {
                   <div className="course-list-mark"><BookOpen size={24} aria-hidden="true" /></div>
                   <div className="course-list-copy">
                     <div className="course-list-title-row">
-                      <h2>{course.name}</h2>
+                      <div className="course-list-heading">
+                        <p className="course-list-eyebrow">دورة تعليمية</p>
+                        <h2 data-testid={`text-course-name-${course.id}`}>{course.name}</h2>
+                      </div>
                       <span className={`course-status${course.published ? '' : ' draft'}`}>
                         {course.published ? <Check size={14} aria-hidden="true" /> : <Radio size={14} aria-hidden="true" />}
                         {course.published ? 'منشورة' : 'مسودة'}
                       </span>
                     </div>
                     <div className="course-card-stats" role="group" aria-label="ملخص الدورة">
-                      <span><Layers3 size={15} aria-hidden="true" /> {formatCount(course.levels.length)} مستويات</span>
-                      <span><FileText size={15} aria-hidden="true" /> {formatCount(countCourseItems(course))} مادة تعليمية</span>
+                      <div className="course-card-stat">
+                        <span className="course-card-stat-icon"><Layers3 size={17} aria-hidden="true" /></span>
+                        <span className="course-card-stat-copy">
+                          <strong data-testid={`text-course-level-count-${course.id}`}>{formatCount(course.levels.length)}</strong>
+                          <span>مستويات</span>
+                        </span>
+                      </div>
+                      <div className="course-card-stat">
+                        <span className="course-card-stat-icon"><FileText size={17} aria-hidden="true" /></span>
+                        <span className="course-card-stat-copy">
+                          <strong data-testid={`text-course-content-count-${course.id}`}>{formatCount(countCourseItems(course))}</strong>
+                          <span>مادة تعليمية</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="course-list-footer">
-                  <Link className="button-primary compact-action course-open-action" href={`/admin/courses/${encodeURIComponent(course.id)}`}>
+                  <Link className="button-primary compact-action course-open-action" href={`/admin/courses/${encodeURIComponent(course.id)}`} data-testid={`link-open-course-${course.id}`}>
                     فتح البناء <ChevronLeft size={16} aria-hidden="true" />
                   </Link>
                   <div className="course-list-tools course-card-actions" role="group" aria-label={`إجراءات ${course.name}`}>
@@ -290,16 +305,17 @@ export function AdminCoursesIndexPage() {
                       onClick={() => void run('set_course_published', { courseId: course.id, published: !course.published })}
                       aria-label={course.published ? 'إيقاف النشر' : 'نشر الدورة'}
                       title={course.published ? 'إيقاف النشر' : 'نشر الدورة'}
+                      data-testid={`button-toggle-publish-course-${course.id}`}
                     >
                       {course.published ? <Radio size={17} aria-hidden="true" /> : <Check size={17} aria-hidden="true" />}
                     </button>
-                    <button className="course-tool" type="button" onClick={() => { setName(course.name); setEditing(course); }} aria-label="تعديل اسم الدورة" title="تعديل اسم الدورة">
+                    <button className="course-tool" type="button" onClick={() => { setName(course.name); setEditing(course); }} aria-label="تعديل اسم الدورة" title="تعديل اسم الدورة" data-testid={`button-edit-course-${course.id}`}>
                       <Pencil size={16} aria-hidden="true" />
                     </button>
-                    <button className="course-tool delete-action" type="button" onClick={() => deleteCourse(course)} aria-label="حذف الدورة" title="حذف الدورة">
+                    <button className="course-tool delete-action" type="button" onClick={() => deleteCourse(course)} aria-label="حذف الدورة" title="حذف الدورة" data-testid={`button-delete-course-${course.id}`}>
                       <Trash2 size={16} aria-hidden="true" />
                     </button>
-                    <DragHandle attributes={attributes} listeners={listeners} />
+                    <DragHandle attributes={attributes} listeners={listeners} testId={`button-reorder-course-${course.id}`} />
                   </div>
                 </div>
               </article>

@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: 40 42% 95%;
+  --foreground: 202 27% 21%;
+  --border: 34 24% 84%;
+  --card: 42 48% 99%;
+  --card-foreground: 202 27% 21%;
+  --primary: 174 43% 31%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 38 27% 90%;
+  --muted-foreground: 198 11% 46%;
+  --app-font-sans: 'IBM Plex Sans Arabic', 'DM Sans', sans-serif;
+}
+
+.dark {
+  --background: 222 28% 13%;
+  --foreground: 42 67% 97%;
+  --border: 220 18% 26%;
+  --card: 222 25% 17%;
+  --card-foreground: 42 67% 97%;
+  --primary: 166 49% 45%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 220 20% 22%;
+  --muted-foreground: 220 10% 68%;
+}
+
+.mockup-current,
+.mockup-refined {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 28px;
+  background: #f4f7ed;
+  color: #253b42;
+  font-family: 'IBM Plex Sans Arabic', 'DM Sans', sans-serif;
+}
+
+.mockup-card-width {
+  width: min(100%, 720px);
+}
+
+.mockup-current .panel {
+  border: 1px solid #e4e9df;
+  border-radius: 20px;
+  background: #fffefa;
+  box-shadow: 0 8px 25px rgba(54, 64, 48, .045);
+}
+
+.mockup-current button {
+  font: inherit;
+}
+
+.mockup-current .course-list-card {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  overflow: hidden;
+  padding: 20px 22px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fffefa 0%, #fbfcf7 100%);
+  box-shadow: 0 16px 36px rgba(48, 70, 55, .065);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.mockup-current .course-list-card::before {
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 5px;
+  background: linear-gradient(180deg, #43a184, #b8d8b8);
+  content: '';
+}
+
+.mockup-current .course-list-main {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 15px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mockup-current .course-list-mark {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 1px solid #dcece0;
+  border-radius: 18px 18px 18px 6px;
+  background: linear-gradient(145deg, #edf7ee, #e3f0e7);
+  color: #207d68;
+}
+
+.mockup-current .course-list-copy {
+  min-width: 0;
+}
+
+.mockup-current .course-list-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  min-width: 0;
+}
+
+.mockup-current .course-list-copy h2 {
+  margin: 0;
+  color: #233c3b;
+  font-size: 1.08rem;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.mockup-current .course-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 8px;
+  color: #788780;
+  font-size: .77rem;
+}
+
+.mockup-current .course-card-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mockup-current .course-card-stats svg {
+  color: #628276;
+}
+
+.mockup-current .course-list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #e9eee6;
+}
+
+.mockup-current .course-list-tools,
+.mockup-current .course-card-actions {
+  display: flex;
+  align-items: center;
+}
+
+.mockup-current .course-list-tools {
+  gap: 5px;
+}
+
+.mockup-current .course-card-actions {
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid #e6ebe3;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .72);
+}
+
+.mockup-current .course-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 99px;
+  background: #e7f3eb;
+  color: #28755d;
+  padding: 6px 10px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.mockup-current .course-tool {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #667875;
+}
+
+.mockup-current .course-tool:hover {
+  background: #f1f5ed;
+  color: #207d68;
+}
+
+.mockup-current .course-card-actions .publish-action {
+  background: #edf7ef;
+  color: #28755d;
+}
+
+.mockup-current .course-card-actions .delete-action {
+  color: #a65e51;
+}
+
+.mockup-current .course-open-action {
+  display: inline-flex;
+  min-width: 148px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 13px;
+  background: #174f49;
+  color: #fff;
+  padding: 0 14px;
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+.mockup-current .drag-handle {
+  color: #89968e;
+  cursor: grab;
+}
+
+@media (max-width: 600px) {
+  .mockup-current,
+  .mockup-refined {
+    padding: 16px;
+  }
+
+  .mockup-current .course-list-card {
+    gap: 13px;
+    padding: 15px;
+    border-radius: 19px;
+  }
+
+  .mockup-current .course-list-main {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .mockup-current .course-list-mark {
+    width: 48px;
+    height: 48px;
+  }
+
+  .mockup-current .course-list-copy h2 {
+    font-size: .96rem;
+  }
+
+  .mockup-current .course-list-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .mockup-current .course-open-action {
+    min-width: 0;
+    width: 100%;
+    min-height: 42px;
+    padding-inline: 10px;
+    font-size: .78rem;
+  }
+
+  .mockup-current .course-card-actions {
+    gap: 2px;
+    padding: 3px;
+  }
+
+  .mockup-current .course-tool {
+    width: 34px;
+    height: 36px;
+  }
+}
