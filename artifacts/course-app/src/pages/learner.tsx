@@ -23,51 +23,57 @@ export function LearnerHomePage() {
 
   return (
     <AppShell title="رحلتي التعليمية" audience="learner">
-      <PageHeading
-        eyebrow="أهلًا بعودتك"
-        title={learner ? `مرحبًا، ${learner.name}` : 'مساحة المتعلّم'}
-        subtitle="اختر دورة لعرض مستوياتها وأقسامها ومحتواها."
-      />
-      <section className="panel learner-welcome">
-        <div className="dialog-icon">
-          <BookOpen size={22} aria-hidden="true" />
-        </div>
-        <div>
-          <div className="eyebrow">الحساب المرتبط</div>
-          <div className="learner-account-name" data-testid="text-learner-name">
-            {learner?.name}
+      <div className="course-pages learner-home-page" dir="rtl">
+        <PageHeading
+          eyebrow="أهلًا بعودتك"
+          title={learner ? `مرحبًا، ${learner.name}` : 'مساحة المتعلّم'}
+          subtitle="خطوة قصيرة اليوم تصنع فرقًا. اختر مسارك وتعلّم بالوتيرة التي تناسبك."
+        />
+        <section className="panel learner-welcome" data-testid="panel-learner-welcome">
+          <div className="dialog-icon">
+            <BookOpen size={22} aria-hidden="true" />
           </div>
-          <div className="person-email ltr" data-testid="text-learner-email">
-            {learner?.email}
+          <div className="learner-welcome-copy">
+            <div className="eyebrow">مساحتك التعليمية</div>
+            <div className="learner-account-name" data-testid="text-learner-name">
+              {learner?.name}
+            </div>
+            <div className="person-email ltr" data-testid="text-learner-email">
+              {learner?.email}
+            </div>
           </div>
-        </div>
-      </section>
-      {coursesQuery.isLoading ? (
-        <section className="panel learner-home-status"><LoadingState label="جارٍ تجهيز مسارك التعليمي…" /></section>
-      ) : coursesQuery.isError ? (
-        <section className="panel learner-empty-panel">
-          <EmptyState title="تعذّر تحميل دورتك" description="تحقق من اتصالك ثم حاول فتح المسار مرة أخرى." icon={LibraryBig} />
-          <div className="empty-state-action"><button type="button" className="button-soft" onClick={() => void coursesQuery.refetch()}>إعادة المحاولة</button></div>
+          <div className="learner-welcome-mark" aria-hidden="true">لُ</div>
         </section>
-      ) : courses.length ? (
-        <section className="learner-home-courses">
-          <h2>دوراتك</h2>
-          <div className="learner-hierarchy-grid learner-course-grid">
-            {courses.map((course) => (
-              <LearnerCourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        </section>
-      ) : (
-        <section className="panel learner-empty-panel">
-          <EmptyState title="لا توجد دروس متاحة بعد" description="تم تجهيز دخولك. ستظهر الدورة ومحتواها هنا عند إضافتهما." icon={LibraryBig} />
-        </section>
-      )}
-      <Link className="learner-home-community" href="/learn/community" data-testid="link-learner-community">
-        <span className="learner-home-community-icon"><MessagesSquare size={20} /></span>
-        <span><strong>مساحة المجموعة</strong><small>تابع المحادثة مع المتعلمين</small></span>
-        <ChevronLeft size={17} />
-      </Link>
+        {coursesQuery.isLoading ? (
+          <section className="panel learner-home-status"><LoadingState label="جارٍ تجهيز مسارك التعليمي…" /></section>
+        ) : coursesQuery.isError ? (
+          <section className="panel learner-empty-panel">
+            <EmptyState title="تعذّر تحميل دورتك" description="تحقق من اتصالك ثم حاول فتح المسار مرة أخرى." icon={LibraryBig} />
+            <div className="empty-state-action"><button type="button" className="button-soft" onClick={() => void coursesQuery.refetch()} data-testid="button-retry-courses">إعادة المحاولة</button></div>
+          </section>
+        ) : courses.length ? (
+          <section className="learner-home-courses" data-testid="list-learner-courses">
+            <div className="learner-courses-heading">
+              <div><div className="eyebrow">مساراتك الحالية</div><h2>دوراتك</h2></div>
+              <span data-testid="text-learner-course-count">{new Intl.NumberFormat('ar').format(courses.length)} دورات</span>
+            </div>
+            <div className="learner-hierarchy-grid learner-course-grid">
+              {courses.map((course) => (
+                <LearnerCourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section className="panel learner-empty-panel" data-testid="empty-learner-courses">
+            <EmptyState title="لا توجد دروس متاحة بعد" description="تم تجهيز دخولك. ستظهر الدورة ومحتواها هنا عند إضافتهما." icon={LibraryBig} />
+          </section>
+        )}
+        <Link className="learner-home-community" href="/learn/community" data-testid="link-learner-community">
+          <span className="learner-home-community-icon"><MessagesSquare size={20} /></span>
+          <span><strong>مساحة المجموعة</strong><small>تابع المحادثة مع المتعلمين</small></span>
+          <ChevronLeft size={17} />
+        </Link>
+      </div>
     </AppShell>
   );
 }

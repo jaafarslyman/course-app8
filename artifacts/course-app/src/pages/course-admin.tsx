@@ -230,12 +230,12 @@ export function AdminCoursesIndexPage() {
       <div className="course-pages" dir="rtl">
         <PageHeading eyebrow="مسار التعلّم" title="الدورات" subtitle="رتّب رحلة التعلّم من أول خطوة، ثم افتح أي دورة لبناء مستوياتها ومحتواها.">
           <div className="course-page-actions">
-            <button type="button" className="button-primary" onClick={() => setEditing({ id: '', name: '', published: false } as Course)}>
+            <button type="button" className="button-primary" onClick={() => setEditing({ id: '', name: '', published: false } as Course)} data-testid="button-create-course">
               <Plus size={17} aria-hidden="true" /> إنشاء دورة
             </button>
           </div>
         </PageHeading>
-        <section className="course-summary-band">
+        <section className="course-summary-band" data-testid="panel-course-summary">
           <div>
             <h2 className="course-summary-title">كل درس في مكانه، وكل خطوة لها معنى.</h2>
             <p className="course-summary-copy">ابنِ مسارًا واضحًا من محتوى صغير ومتدرّج. يمكنك إعادة ترتيب أي مجموعة بالسحب أو باستخدام لوحة المفاتيح.</p>
@@ -263,7 +263,7 @@ export function AdminCoursesIndexPage() {
             className="course-list"
             render={(course) => ({ attributes, listeners }) => (
               <article className="panel course-list-card">
-                <div className="course-list-main">
+                <div className="course-list-main" data-testid={`card-course-${course.id}`}>
                   <div className="course-list-mark"><BookOpen size={24} aria-hidden="true" /></div>
                   <div className="course-list-copy">
                     <div className="course-list-title-row">
@@ -271,7 +271,7 @@ export function AdminCoursesIndexPage() {
                         <p className="course-list-eyebrow">دورة تعليمية</p>
                         <h2 data-testid={`text-course-name-${course.id}`}>{course.name}</h2>
                       </div>
-                      <span className={`course-status${course.published ? '' : ' draft'}`}>
+                      <span className={`course-status${course.published ? '' : ' draft'}`} data-testid={`status-course-${course.id}`}>
                         {course.published ? <Check size={14} aria-hidden="true" /> : <Radio size={14} aria-hidden="true" />}
                         {course.published ? 'منشورة' : 'مسودة'}
                       </span>
@@ -330,7 +330,7 @@ export function AdminCoursesIndexPage() {
               <div className="eyebrow">مسار تعلّم جديد</div>
               <h2 id="course-name-title">{editing.id ? 'تعديل اسم الدورة' : 'إنشاء دورة'}</h2>
               <form className="course-form" onSubmit={(event) => { event.preventDefault(); const trimmed = name.trim(); if (!trimmed) return; void run(editing.id ? 'rename_course' : 'create_course', editing.id ? { courseId: editing.id, name: trimmed } : { name: trimmed }); }}>
-                <label className="field">اسم الدورة<input autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength={140} placeholder="مثال: الإنجليزية في الحياة اليومية" required /></label>
+                <label className="field">اسم الدورة<input autoFocus value={name} onChange={(event) => setName(event.target.value)} maxLength={140} placeholder="مثال: الإنجليزية في الحياة اليومية" required data-testid="input-course-name" /></label>
                 {error && <InlineAlert>{error}</InlineAlert>}
                 <div className="course-form-actions"><button className="button-primary" type="submit" disabled={working || !name.trim()}>{working ? 'جارٍ الحفظ…' : editing.id ? 'حفظ الاسم' : 'إنشاء الدورة'}</button><button className="button-soft" type="button" onClick={() => setEditing(null)} disabled={working}>إلغاء</button></div>
               </form>
@@ -419,7 +419,7 @@ export function CourseBuilderPage() {
           query.isError ? <section className="panel"><EmptyState title="تعذّر تحميل البناء" description="أعد المحاولة لتحميل بنية الدورة." icon={Layers3} /><div className="empty-state-action"><button type="button" className="button-soft" onClick={() => void query.refetch()}><RefreshCw size={15} /> إعادة المحاولة</button></div></section> :
           !course ? <section className="panel"><EmptyState title="لم نعثر على هذه الدورة" description="قد تكون حُذفت أو لم تعد متاحة في حسابك." icon={BookOpen} /><div className="empty-state-action"><Link className="button-soft" href="/admin/courses">العودة إلى الدورات</Link></div></section> :
           <>
-            <section className="course-builder-hero">
+              <section className="course-builder-hero" data-testid={`panel-course-builder-${course.id}`}>
               <div><div className="eyebrow">مخطط المحتوى</div><h2>{course.name}</h2><p>رتّب المواد في المستوى أو القسم المناسب. سيظهر هذا الترتيب نفسه للمتعلّم.</p></div>
               <div className="course-builder-hero-tools" role="group" aria-label="أدوات الدورة">
                 <EditorIconButton
@@ -816,16 +816,16 @@ function ContentDialog({
             }
           }
         }}>
-          <label className="field">{mode === 'content' ? 'عنوان المادة' : 'الاسم'}<input autoFocus value={title} maxLength={140} onChange={(event) => setTitle(event.target.value)} placeholder={mode === 'content' ? 'مثال: التحية والتعارف' : mode === 'level' ? 'مثال: الأساسيات' : 'مثال: في المقهى'} required /></label>
+          <label className="field">{mode === 'content' ? 'عنوان المادة' : 'الاسم'}<input autoFocus value={title} maxLength={140} onChange={(event) => setTitle(event.target.value)} placeholder={mode === 'content' ? 'مثال: التحية والتعارف' : mode === 'level' ? 'مثال: الأساسيات' : 'مثال: في المقهى'} required data-testid={`input-${mode}-title`} /></label>
           {mode === 'content' && <>
-            <label className="field">نوع المادة<select value={kind} onChange={(event) => { void discardUncommittedUpload(); setKind(event.target.value as CourseContentKind); setBody(''); setThumbnailStoragePath(null); setFileMeta({ storagePath: null, mimeType: null, fileSizeBytes: null, durationSeconds: null }); }}><option value="video">فيديو</option><option value="image">صورة</option><option value="text">نص تعليمي</option><option value="note">ملاحظة</option><option value="audio">ملف صوتي</option></select></label>
-            {(kind === 'text' || kind === 'note') && <label className="field">{kind === 'note' ? 'الملاحظة' : 'النص التعليمي'}<textarea value={body} onChange={(event) => setBody(event.target.value)} placeholder="اكتب محتوى واضحًا ومباشرًا للمتعلّم." /></label>}
+            <label className="field">نوع المادة<select value={kind} onChange={(event) => { void discardUncommittedUpload(); setKind(event.target.value as CourseContentKind); setBody(''); setThumbnailStoragePath(null); setFileMeta({ storagePath: null, mimeType: null, fileSizeBytes: null, durationSeconds: null }); }} data-testid="select-content-kind"><option value="video">فيديو</option><option value="image">صورة</option><option value="text">نص تعليمي</option><option value="note">ملاحظة</option><option value="audio">ملف صوتي</option></select></label>
+            {(kind === 'text' || kind === 'note') && <label className="field">{kind === 'note' ? 'الملاحظة' : 'النص التعليمي'}<textarea value={body} onChange={(event) => setBody(event.target.value)} placeholder="اكتب محتوى واضحًا ومباشرًا للمتعلّم." data-testid="input-content-body" /></label>}
             {needsFile && <>
               <label className="course-upload-drop" onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const file = event.dataTransfer.files[0]; if (file && !uploading) void uploadFile(file); }}>
                 <Upload size={20} />
                 <strong>{fileMeta.storagePath ? 'تم تجهيز الملف للدرس' : 'اسحب الملف إلى هنا أو اختره من جهازك'}</strong>
                 <span>رفع محمي قابل للاستئناف · الحد الأقصى 500 ميغابايت</span>
-                <input className="course-file-input" type="file" accept={accepted} disabled={uploading} onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadFile(file); event.currentTarget.value = ''; }} />
+                <input className="course-file-input" type="file" accept={accepted} disabled={uploading} onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadFile(file); event.currentTarget.value = ''; }} data-testid="input-content-file" />
               </label>
               {kind === 'audio' && <div className="course-recording">{recording ? <strong><span className="recording-dot" /> التسجيل جارٍ…</strong> : <strong><Mic size={16} /> أو سجّل شرحًا صوتيًا قصيرًا</strong>}<button type="button" className={recording ? 'button-danger' : 'button-soft'} disabled={uploading} onClick={() => recording ? stopRecording() : void startRecording()}>{recording ? 'إيقاف وإرفاق' : 'بدء التسجيل'}</button></div>}
               {uploading && <><div className="course-progress-track" role="progressbar" aria-valuenow={uploadPercent ?? 0} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${uploadPercent ?? 0}%` }} /></div><div className="course-upload-status"><span>جارٍ رفع الملف… {formatCount(uploadPercent ?? 0)}٪</span><button type="button" className="button-soft compact-action" onClick={() => uploadController?.abort()}>إلغاء الرفع</button></div></>}
@@ -849,7 +849,7 @@ function ContentDialog({
               </div>
               <input ref={thumbnailInputRef} hidden type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={uploading} onChange={(event) => { const file = event.target.files?.[0]; if (file) void uploadFile(file, 'thumbnail'); event.currentTarget.value = ''; }} />
             </div>}
-            <label className="field">ملاحظة إضافية للمتعلّم<textarea value={supplementalNote} maxLength={10000} onChange={(event) => setSupplementalNote(event.target.value)} placeholder="تظهر هذه الملاحظة أسفل المادة." /></label>
+            <label className="field">ملاحظة إضافية للمتعلّم<textarea value={supplementalNote} maxLength={10000} onChange={(event) => setSupplementalNote(event.target.value)} placeholder="تظهر هذه الملاحظة أسفل المادة." data-testid="input-content-supplemental-note" /></label>
           </>}
           {error && <InlineAlert>{error}</InlineAlert>}
           <div className="course-form-actions"><button className="button-primary" type="submit" disabled={pending || uploading || recording || !ready}>{pending ? 'جارٍ الحفظ…' : mode === 'content' ? item ? 'حفظ التعديلات' : 'إضافة المادة' : mode === 'level' ? 'إضافة المستوى' : 'إضافة القسم'}</button><button className="button-soft" type="button" onClick={closeDialog} disabled={pending || uploading || recording}>إلغاء</button></div>
